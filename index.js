@@ -6,6 +6,7 @@ const app = express()
 const port = 3000
 
 
+// Fetech - pega os dados do banco
 
 async function fetchFromDatabase () {
 
@@ -19,11 +20,14 @@ async function fetchFromDatabase () {
     return a
 }
 
+
+// Retorna par ao site os dados
 async function sendGet (res) {
     var ans = await fetchFromDatabase()
     res.send(ans)
 }
 
+// main http
 async function servidor() {
     app.get('/motos', (req, res) => {
         sendGet(res)
@@ -34,6 +38,7 @@ async function servidor() {
     })
 }
 
+// Conecta no bd
 const { Client } = require('pg')
 const pg = new Client({
     user: 'hub',
@@ -43,12 +48,14 @@ const pg = new Client({
     port: 5432,
 })
 
+// inicia http
 servidor()
 
 async function pgConnect() {
     await pg.connect()
 }
 
+// Coloca no bd
 function addToDatabase (vel, lat, lon, moto) {
     const query = `INSERT INTO dados (vel, lat, lon, moto) VALUES (${vel}, ${lat}, ${lon}, \'${moto}\')`;
 
@@ -57,6 +64,8 @@ function addToDatabase (vel, lat, lon, moto) {
     console.log('recebido')
 }
 
+
+// pega o mqtt
 pgConnect().then(
     () => {
         client.on('connect', function () {
