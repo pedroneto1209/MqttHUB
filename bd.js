@@ -10,7 +10,7 @@ class dataBase {
         })
     }
     
-    // Fetech - pega os dados do banco
+    // Fetch - pega os dados do banco
     async fetchFromDatabase () {
         
         const query = `SELECT * FROM dados`;
