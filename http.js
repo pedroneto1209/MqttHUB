@@ -1,11 +1,14 @@
 const express = require('express');
 const app = express()
 const port = 3000
+app.use(express.json())
 
 class httpServer {
+    users = []
 
-    constructor(db) {
+    constructor(db, mqttServer) {
         this.db=db
+        this.mqttServer=mqttServer
     }
 
     // Retorna par ao site os dados
@@ -18,6 +21,11 @@ class httpServer {
     async servidor() {
         app.get('/motos', (req, res) => {
             this.sendGet(res)
+        })
+        app.post('/motos', (req, res) => {
+            res.json(req.body);
+            const msg = req.body
+            this.mqttServer.sendmqtt(msg)
         })
         
         app.listen(port, () => {
